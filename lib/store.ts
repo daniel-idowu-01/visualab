@@ -1,0 +1,45 @@
+import { create } from "zustand"
+import type { ConfigOptions, VisuaLabState } from "@/types/app"
+
+const initialConfig: ConfigOptions = {
+  backgroundRemoval: false,
+  backgroundColor: "#ffffff",
+  shadowEffects: 50,
+  shadowStyle: "soft",
+  lifestyleShot: false,
+  lifestylePrompt: "",
+  ctaText: "",
+  ctaFontSize: 24,
+  ctaTextColor: "#ffffff",
+  imageResolution: "sd",
+  aspectRatio: "1:1",
+  outputFormat: "png",
+}
+
+export const useVisuaLabStore = create<VisuaLabState>((set) => ({
+  productDescription: "",
+  referenceImageFile: null,
+  aiPromptEnhancement: false,
+  config: initialConfig,
+  generatedImages: [],
+  isLoading: false,
+  error: null,
+
+  setProductDescription: (desc) => set({ productDescription: desc }),
+  setReferenceImageFile: (file) => set({ referenceImageFile: file }),
+  toggleAiPromptEnhancement: () => set((state) => ({ aiPromptEnhancement: !state.aiPromptEnhancement })),
+  updateConfig: (key, value) => set((state) => ({ config: { ...state.config, [key]: value } })),
+  addImage: (image) => set((state) => ({ generatedImages: [...state.generatedImages, image] })),
+  setIsLoading: (loading) => set({ isLoading: loading }),
+  setError: (error) => set({ error }),
+  resetState: () =>
+    set({
+      productDescription: "",
+      referenceImageFile: null,
+      aiPromptEnhancement: false,
+      config: initialConfig,
+      generatedImages: [],
+      isLoading: false,
+      error: null,
+    }),
+}))
