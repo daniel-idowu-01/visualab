@@ -33,7 +33,7 @@ export default function EditorPage() {
       </div>
 
       {/* Configuration Sidebar */}
-      <aside
+      {/* <aside
         className={`fixed inset-y-0 left-0 z-40 w-full lg:w-80 bg-neutral-50 border-r border-neutral-200 p-4 md:p-6 overflow-y-auto transition-transform duration-300 ease-in-out
     ${
       isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -51,7 +51,7 @@ export default function EditorPage() {
           </Button>
         </div>
         <SidebarSettings />
-      </aside>
+      </aside> */}
 
       {/* Main Content Area */}
       <div
