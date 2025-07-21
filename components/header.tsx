@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 
 export function Header() {
   return (
-    <header className="fixed flex h-16 items-center w-full justify-between px-4 md:px-6 border-b bg-white shadow-sm">
+    <header className="flex h-16 items-center w-full justify-between px-4 md:px-6 border-b bg-white shadow-sm">
       <Link className="flex items-center gap-2" href="/">
         <SparklesIcon className="h-7 w-7 text-softblue-500" />
         <span className="text-xl font-bold text-neutral-900">

@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { PanelLeftOpenIcon, PanelLeftCloseIcon, XIcon } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SidebarSettings } from "@/components/sidebar-settings"
-import { GenerateImageTab } from "@/components/tabs/generate-image-tab"
-import { LifestyleShotTab } from "@/components/tabs/lifestyle-shot-tab"
-import { GenerativeFillTab } from "@/components/tabs/generative-fill-tab"
-import { EraseElementsTab } from "@/components/tabs/erase-elements-tab"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PanelLeftOpenIcon, PanelLeftCloseIcon, XIcon } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SidebarSettings } from "@/components/sidebar-settings";
+import { GenerateImageTab } from "@/components/tabs/generate-image-tab";
+import { LifestyleShotTab } from "@/components/tabs/lifestyle-shot-tab";
+import { GenerativeFillTab } from "@/components/tabs/generative-fill-tab";
+import { EraseElementsTab } from "@/components/tabs/erase-elements-tab";
 
 export default function EditorPage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <div className="flex min-h-[calc(100vh-128px)] bg-neutral-50 lg:grid lg:grid-cols-[auto_1fr]">
@@ -23,7 +23,11 @@ export default function EditorPage() {
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="bg-white shadow-md"
         >
-          {isSidebarOpen ? <PanelLeftCloseIcon className="h-5 w-5" /> : <PanelLeftOpenIcon className="h-5 w-5" />}
+          {isSidebarOpen ? (
+            <PanelLeftCloseIcon className="h-5 w-5" />
+          ) : (
+            <PanelLeftOpenIcon className="h-5 w-5" />
+          )}
           <span className="sr-only">Toggle sidebar</span>
         </Button>
       </div>
@@ -31,11 +35,17 @@ export default function EditorPage() {
       {/* Configuration Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-full lg:w-80 bg-neutral-50 border-r border-neutral-200 p-4 md:p-6 overflow-y-auto transition-transform duration-300 ease-in-out
-    ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:sticky lg:top-0 lg:translate-x-0 lg:flex-shrink-0`}
+    ${
+      isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+    } lg:sticky lg:top-0 lg:translate-x-0 lg:flex-shrink-0`}
       >
         <div className="flex justify-between items-center mb-6 lg:hidden">
           <h2 className="text-2xl font-bold text-neutral-900">Settings</h2>
-          <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(false)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSidebarOpen(false)}
+          >
             <XIcon className="h-6 w-6" />
             <span className="sr-only">Close sidebar</span>
           </Button>
@@ -45,7 +55,9 @@ export default function EditorPage() {
 
       {/* Main Content Area */}
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${isSidebarOpen ? "lg:col-start-2" : ""}`}
+        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
+          isSidebarOpen ? "lg:col-start-2" : ""
+        }`}
       >
         <Tabs defaultValue="generate-image" className="flex-1 flex flex-col">
           <div className="sticky top-0 z-10 bg-neutral-50 border-b border-neutral-200 px-4 md:px-6 lg:px-8 pt-4">
@@ -92,5 +104,5 @@ export default function EditorPage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }

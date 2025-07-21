@@ -10,7 +10,7 @@ import {
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-128px)] p-4 md:p-8 md:pt-40 bg-gradient-to-br from-neutral-50 to-neutral-100">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-128px)] p-4 md:p-8 bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="max-w-4xl w-full space-y-10 text-center">
         <div className="space-y-6">
           <h1 className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl lg:text-7xl leading-tight">

@@ -1,15 +1,20 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
-import { useVisuaLabStore } from "@/lib/store"
-import { UploadCloudIcon, SparklesIcon, Loader2Icon } from "lucide-react"
-import { useImageGeneration } from "@/hooks/use-image-generation"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import type React from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { useVisuaLabStore } from "@/lib/store";
+import { UploadCloudIcon, SparklesIcon, Loader2Icon } from "lucide-react";
+import { useImageGeneration } from "@/hooks/use-image-generation";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function PromptInput() {
   const {
@@ -21,29 +26,34 @@ export function PromptInput() {
     toggleAiPromptEnhancement,
     isLoading,
     error,
-  } = useVisuaLabStore()
-  const { generateImage } = useImageGeneration()
+  } = useVisuaLabStore();
+  const { generateImage } = useImageGeneration();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setReferenceImageFile(event.target.files[0])
+      setReferenceImageFile(event.target.files[0]);
     } else {
-      setReferenceImageFile(null)
+      setReferenceImageFile(null);
     }
-  }
+  };
 
   const handleGenerate = () => {
     if (!productDescription.trim()) {
-      useVisuaLabStore.setState({ error: "Please enter a product description." })
-      return
+      useVisuaLabStore.setState({
+        error: "Please enter a product description.",
+      });
+      return;
     }
-    generateImage()
-  }
+    generateImage();
+  };
 
   return (
     <div className="space-y-6">
       <div className="space-y-3">
-        <Label htmlFor="product-description" className="text-lg font-semibold text-neutral-800">
+        <Label
+          htmlFor="product-description"
+          className="text-lg font-semibold text-neutral-800"
+        >
           Product Description
         </Label>
         <Textarea
@@ -56,7 +66,10 @@ export function PromptInput() {
       </div>
 
       <div className="space-y-3">
-        <Label htmlFor="reference-image" className="text-lg font-semibold text-neutral-800 flex items-center gap-2">
+        <Label
+          htmlFor="reference-image"
+          className="text-lg font-semibold text-neutral-800 flex items-center gap-2"
+        >
           <UploadCloudIcon className="h-5 w-5 text-softblue-500" />
           Upload Reference Image (Optional)
         </Label>
@@ -66,7 +79,7 @@ export function PromptInput() {
           accept="image/*"
           onChange={handleFileChange}
           className="block w-full text-sm text-neutral-500
-            file:mr-4 file:py-2 file:px-4
+            file:mr-4 file:px-4
             file:rounded-full file:border-0
             file:text-sm file:font-semibold
             file:bg-softblue-50 file:text-softblue-700
@@ -74,7 +87,8 @@ export function PromptInput() {
         />
         {referenceImageFile && (
           <p className="text-sm text-neutral-500 mt-2">
-            Selected: {referenceImageFile.name} ({(referenceImageFile.size / 1024 / 1024).toFixed(2)} MB)
+            Selected: {referenceImageFile.name} (
+            {(referenceImageFile.size / 1024 / 1024).toFixed(2)} MB)
           </p>
         )}
       </div>
@@ -82,7 +96,10 @@ export function PromptInput() {
       <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg border border-neutral-200">
         <div className="flex items-center gap-2">
           <SparklesIcon className="h-5 w-5 text-softblue-500" />
-          <Label htmlFor="ai-prompt-enhancement" className="text-base font-medium text-neutral-800">
+          <Label
+            htmlFor="ai-prompt-enhancement"
+            className="text-base font-medium text-neutral-800"
+          >
             AI Prompt Enhancement
           </Label>
           <TooltipProvider>
@@ -91,7 +108,8 @@ export function PromptInput() {
                 <span className="text-neutral-400 cursor-help">ⓘ</span>
               </TooltipTrigger>
               <TooltipContent className="max-w-xs text-sm">
-                Let Bria AI refine your prompt for better image generation results.
+                Let Bria AI refine your prompt for better image generation
+                results.
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -119,10 +137,13 @@ export function PromptInput() {
         )}
       </Button>
       {error && (
-        <div className="text-red-500 text-center text-sm font-medium mt-2" role="alert">
+        <div
+          className="text-red-500 text-center text-sm font-medium mt-2"
+          role="alert"
+        >
           {error}
         </div>
       )}
     </div>
-  )
+  );
 }
