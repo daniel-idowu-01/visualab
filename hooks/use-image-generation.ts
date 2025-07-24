@@ -1,21 +1,28 @@
-import { useVisuaLabStore } from "@/lib/store"
-import type { ConfigOptions, ImageResult } from "@/types/app"
+import { useVisuaLabStore } from "@/lib/store";
+import type { ConfigOptions, ImageResult } from "@/types/app";
 
 export function useImageGeneration() {
-  const { productDescription, referenceImageFile, aiPromptEnhancement, config, setIsLoading, setError, addImage } =
-    useVisuaLabStore()
+  const {
+    productDescription,
+    referenceImageFile,
+    aiPromptEnhancement,
+    config,
+    setIsLoading,
+    setError,
+    addImage,
+  } = useVisuaLabStore();
 
   const generateImage = async () => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
     try {
-      const formData = new FormData()
-      formData.append("productDescription", productDescription)
-      formData.append("aiPromptEnhancement", String(aiPromptEnhancement))
-      formData.append("config", JSON.stringify(config))
+      const formData = new FormData();
+      formData.append("prompt", productDescription);
+      // formData.append("aiPromptEnhancement", String(aiPromptEnhancement));
+      // formData.append("config", JSON.stringify(config));
       if (referenceImageFile) {
-        formData.append("referenceImage", referenceImageFile)
+        formData.append("referenceImage", referenceImageFile);
       }
 
       const response = await fetch("/api/generate", {
@@ -24,22 +31,29 @@ export function useImageGeneration() {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || "Failed to generate image.")
+        setIsLoading(false);
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to generate image.");
       }
 
-      const data: ImageResult = await response.json()
-      addImage(data)
+      const data: ImageResult = await response.json();
+      console.log("data in hook: ", data)
+      setIsLoading(false);
+      addImage(data);
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.")
+      setError(err.message || "An unexpected error occurred.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  const reEditImage = async (imageToEdit: ImageResult, newConfig: ConfigOptions) => {
-    setIsLoading(true)
-    setError(null)
+  ////////////////
+  const reEditImage = async (
+    imageToEdit: ImageResult,
+    newConfig: ConfigOptions
+  ) => {
+    setIsLoading(true);
+    setError(null);
 
     try {
       const response = await fetch("/api/edit", {
@@ -53,24 +67,28 @@ export function useImageGeneration() {
           newConfig,
           productDescription, // Pass current description for context
         }),
-      })
+      });
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || "Failed to re-edit image.")
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to re-edit image.");
       }
 
-      const data: ImageResult = await response.json()
+      const data: ImageResult = await response.json();
       // Replace the old image with the new one in the store
       useVisuaLabStore.setState((state) => ({
-        generatedImages: state.generatedImages.map((img) => (img.id === imageToEdit.id ? data : img)),
-      }))
+        generatedImages: state.generatedImages.map((img) =>
+          img.id === imageToEdit.id ? data : img
+        ),
+      }));
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred during re-editing.")
+      setError(
+        err.message || "An unexpected error occurred during re-editing."
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  return { generateImage, reEditImage }
+  return { generateImage, reEditImage };
 }

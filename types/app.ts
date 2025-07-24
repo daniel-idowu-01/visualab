@@ -8,7 +8,7 @@ export interface ConfigOptions {
   ctaText: string
   ctaFontSize: number
   ctaTextColor: string
-  imageResolution: "sd" | "hd" // Standard Definition, High Definition
+  imageResolution: "sd" | "hd"
   aspectRatio: "1:1" | "16:9" | "9:16"
   outputFormat: "png" | "jpeg"
 }
@@ -28,6 +28,7 @@ export interface VisuaLabState {
   generatedImages: ImageResult[]
   isLoading: boolean
   error: string | null
+  user: boolean
   setProductDescription: (desc: string) => void
   setReferenceImageFile: (file: File | null) => void
   toggleAiPromptEnhancement: () => void

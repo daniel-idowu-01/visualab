@@ -16,6 +16,8 @@ const initialConfig: ConfigOptions = {
   outputFormat: "png",
 }
 
+const user = false
+
 export const useVisuaLabStore = create<VisuaLabState>((set) => ({
   productDescription: "",
   referenceImageFile: null,
@@ -25,6 +27,7 @@ export const useVisuaLabStore = create<VisuaLabState>((set) => ({
   isLoading: false,
   error: null,
 
+  user,
   setProductDescription: (desc) => set({ productDescription: desc }),
   setReferenceImageFile: (file) => set({ referenceImageFile: file }),
   toggleAiPromptEnhancement: () => set((state) => ({ aiPromptEnhancement: !state.aiPromptEnhancement })),

@@ -1,56 +1,68 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useVisuaLabStore } from "@/lib/store"
-import { Button } from "@/components/ui/button"
-import { DownloadIcon, EditIcon, ZoomInIcon, Loader2Icon, ImagePlusIcon } from "lucide-react"
-import { useState } from "react"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import type { ImageResult } from "@/types/app"
-import { useImageGeneration } from "@/hooks/use-image-generation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import Image from "next/image";
+import { useState } from "react";
+import { useVisuaLabStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import {
+  DownloadIcon,
+  EditIcon,
+  ZoomInIcon,
+  Loader2Icon,
+  ImagePlusIcon,
+} from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import type { ImageResult } from "@/types/app";
+import { useImageGeneration } from "@/hooks/use-image-generation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export function ImageGallery() {
-  const { generatedImages, config, isLoading } = useVisuaLabStore()
-  const { reEditImage } = useImageGeneration()
-  const [selectedImage, setSelectedImage] = useState<ImageResult | null>(null)
+  const { reEditImage } = useImageGeneration();
+  const { generatedImages, config, isLoading } = useVisuaLabStore();
+  const [selectedImage, setSelectedImage] = useState<ImageResult | null>(null);
 
-  const latestImage = generatedImages[generatedImages.length - 1]
+  console.log("Generated Images: ", generatedImages);
+
+  const latestImage = generatedImages[generatedImages.length - 1];
 
   const handleDownload = (imageSrc: string, format: "png" | "jpeg") => {
-    const link = document.createElement("a")
-    link.href = imageSrc
-    link.download = `visualab-ad-${Date.now()}.${format}`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+    const link = document.createElement("a");
+    link.href = imageSrc;
+    link.download = `visualab-ad-${Date.now()}.${format}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleReEdit = (image: ImageResult) => {
     // For simplicity, re-editing will apply the *current* sidebar config to the selected image.
     // In a real app, you might load the image's original config into the sidebar.
-    reEditImage(image, config)
-  }
+    reEditImage(image, config);
+  };
 
   return (
     <div className="space-y-6">
       <Card className="bg-white shadow-lg border border-neutral-200">
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-semibold text-neutral-900">Latest Generation</CardTitle>
+          <CardTitle className="text-xl font-semibold text-neutral-900">
+            Latest Generation
+          </CardTitle>
         </CardHeader>
         <CardContent className="min-h-[300px] flex items-center justify-center relative">
           {isLoading && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-900 bg-opacity-60 z-10 rounded-lg">
               <Loader2Icon className="h-12 w-12 text-softblue-500 animate-spin" />
-              <p className="mt-4 text-white text-lg font-medium">Generating your ad...</p>
+              <p className="mt-4 text-white text-lg font-medium">
+                Generating your ad...
+              </p>
             </div>
           )}
           {latestImage ? (
             <div className="relative w-full h-full flex items-center justify-center">
               <Image
                 src={latestImage.src || "/placeholder.svg"}
-                alt={latestImage.alt}
+                alt={latestImage.alt || "Generated product ad"}
                 width={800}
                 height={800}
                 className="max-w-full max-h-[500px] object-contain rounded-lg shadow-md"
@@ -74,7 +86,7 @@ export function ImageGallery() {
                   <DialogContent className="max-w-5xl p-0 bg-transparent border-none">
                     <Image
                       src={latestImage.src || "/placeholder.svg"}
-                      alt={latestImage.alt}
+                      alt={latestImage.alt || "Generated product ad"}
                       width={1200}
                       height={1200}
                       className="w-full h-auto object-contain rounded-lg"
@@ -89,7 +101,12 @@ export function ImageGallery() {
                   variant="secondary"
                   size="icon"
                   className="h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow-md"
-                  onClick={() => handleDownload(latestImage.src, latestImage.configUsed.outputFormat)}
+                  onClick={() =>
+                    handleDownload(
+                      latestImage.src,
+                      latestImage.configUsed.outputFormat
+                    )
+                  }
                 >
                   <DownloadIcon className="h-5 w-5 text-neutral-700" />
                   <span className="sr-only">Download</span>
@@ -109,7 +126,9 @@ export function ImageGallery() {
             <div className="text-center text-neutral-500 p-8">
               <ImagePlusIcon className="h-16 w-16 mx-auto mb-4 text-neutral-300" />
               <p className="text-lg">Your generated ad will appear here.</p>
-              <p className="text-sm mt-2">Start by entering a description and clicking "Generate Ad"!</p>
+              <p className="text-sm mt-2">
+                Start by entering a description and clicking "Generate Ad"!
+              </p>
             </div>
           )}
         </CardContent>
@@ -118,7 +137,9 @@ export function ImageGallery() {
       {generatedImages.length > 1 && (
         <Card className="bg-white shadow-sm border border-neutral-200">
           <CardHeader className="pb-4">
-            <CardTitle className="text-xl font-semibold text-neutral-900">Previous Generations</CardTitle>
+            <CardTitle className="text-xl font-semibold text-neutral-900">
+              Previous Generations
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <ScrollArea className="w-full whitespace-nowrap rounded-md pb-4">
@@ -130,7 +151,7 @@ export function ImageGallery() {
                   >
                     <Image
                       src={image.src || "/placeholder.svg"}
-                      alt={image.alt}
+                      alt={image.alt || ""}
                       width={150}
                       height={150}
                       className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
@@ -165,7 +186,12 @@ export function ImageGallery() {
                         variant="secondary"
                         size="icon"
                         className="h-8 w-8 rounded-full bg-white/80 hover:bg-white"
-                        onClick={() => handleDownload(image.src, image.configUsed.outputFormat)}
+                        onClick={() =>
+                          handleDownload(
+                            image.src,
+                            image.configUsed.outputFormat
+                          )
+                        }
                       >
                         <DownloadIcon className="h-4 w-4 text-neutral-700" />
                         <span className="sr-only">Download</span>
@@ -189,5 +215,5 @@ export function ImageGallery() {
         </Card>
       )}
     </div>
-  )
+  );
 }
