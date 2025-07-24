@@ -1,3 +1,4 @@
+import axios from "axios";
 import { NextResponse } from "next/server";
 import type { ConfigOptions, ImageResult } from "@/types/app";
 
@@ -31,11 +32,21 @@ export async function POST(request: Request) {
     const data = await response.json();
     const imageUrl = data.result[0].urls[0];
     // console.log("Bria generate image response: ", data);
-   //  console.log("1: ", data.result[0].urls);
+    //  console.log("1: ", data.result[0].urls);
+
+    const form = new FormData();
+    form.append("file", imageUrl);
+    form.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET!);
+
+    const cloudinaryRequest = await axios.post(
+      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      form
+    );
+    const fileUrl = cloudinaryRequest?.data.secure_url;
 
     const newImage: ImageResult = {
       id: `img_${Date.now()}`,
-      src: data.result[0].urls[0],
+      src: fileUrl,
       alt: prompt || "Generated product ad",
       configUsed: config,
     };
