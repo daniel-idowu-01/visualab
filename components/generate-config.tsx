@@ -1,21 +1,37 @@
-"use client"
+"use client";
 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronDownIcon, PaletteIcon, CameraIcon, TextCursorInputIcon, SettingsIcon } from "lucide-react"
-import { useVisuaLabStore } from "@/lib/store"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  ChevronDownIcon,
+  PaletteIcon,
+  CameraIcon,
+  TextCursorInputIcon,
+  SettingsIcon,
+} from "lucide-react";
+import { useVisuaLabStore } from "@/lib/store";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function GenerateConfig() {
-  const { config, updateConfig } = useVisuaLabStore()
+  const { config, updateConfig } = useVisuaLabStore();
 
   return (
     <div className="w-full space-y-6">
-      <Card className="bg-white shadow-sm border border-neutral-200">
+      {/* <Card className="bg-white shadow-sm border border-neutral-200">
         <CardHeader className="pb-4">
           <CardTitle className="text-xl font-semibold flex items-center gap-2 text-neutral-900">
             <PaletteIcon className="h-5 w-5 text-softblue-500" />
@@ -23,7 +39,7 @@ export function GenerateConfig() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Background Removal */}
+          Background Removal 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="background-removal" className="font-medium text-neutral-800">
@@ -52,7 +68,7 @@ export function GenerateConfig() {
             )}
           </div>
 
-          {/* Shadow Effects */}
+          Shadow Effects 
           <div className="space-y-3">
             <Label htmlFor="shadow-effects" className="font-medium text-neutral-800">
               Shadow Effects
@@ -94,7 +110,7 @@ export function GenerateConfig() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Lifestyle Shots */}
+          Lifestyle Shots 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="lifestyle-shot" className="font-medium text-neutral-800">
@@ -133,7 +149,7 @@ export function GenerateConfig() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* CTA Text Overlay */}
+          CTA Text Overlay 
           <div className="space-y-3">
             <Label htmlFor="cta-text" className="font-medium text-neutral-800">
               Call-to-Action Text
@@ -177,9 +193,9 @@ export function GenerateConfig() {
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
-      {/* Advanced Settings */}
+      {/* Advanced Settings  */}
       <Collapsible className="w-full space-y-4 p-4 bg-white rounded-lg shadow-sm border border-neutral-200">
         <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-semibold text-neutral-900 [&[data-state=open]>svg]:rotate-180">
           <div className="flex items-center gap-2">
@@ -191,12 +207,17 @@ export function GenerateConfig() {
         <CollapsibleContent className="space-y-6 pt-2">
           {/* Image Resolution */}
           <div className="space-y-3">
-            <Label htmlFor="image-resolution" className="font-medium text-neutral-800">
+            <Label
+              htmlFor="image-resolution"
+              className="font-medium text-neutral-800"
+            >
               Image Resolution
             </Label>
             <Select
               value={config.imageResolution}
-              onValueChange={(value: "sd" | "hd") => updateConfig("imageResolution", value)}
+              onValueChange={(value: "sd" | "hd") =>
+                updateConfig("imageResolution", value)
+              }
             >
               <SelectTrigger className="h-10 text-neutral-700 focus:ring-softblue-500">
                 <SelectValue placeholder="Select resolution" />
@@ -207,15 +228,19 @@ export function GenerateConfig() {
               </SelectContent>
             </Select>
           </div>
-
           {/* Aspect Ratio */}
           <div className="space-y-3">
-            <Label htmlFor="aspect-ratio" className="font-medium text-neutral-800">
+            <Label
+              htmlFor="aspect-ratio"
+              className="font-medium text-neutral-800"
+            >
               Aspect Ratio
             </Label>
             <Select
               value={config.aspectRatio}
-              onValueChange={(value: "1:1" | "16:9" | "9:16") => updateConfig("aspectRatio", value)}
+              onValueChange={(value: "1:1" | "16:9" | "9:16") =>
+                updateConfig("aspectRatio", value)
+              }
             >
               <SelectTrigger className="h-10 text-neutral-700 focus:ring-softblue-500">
                 <SelectValue placeholder="Select aspect ratio" />
@@ -227,15 +252,19 @@ export function GenerateConfig() {
               </SelectContent>
             </Select>
           </div>
-
-          {/* Output Format */}
+          {/* Output Format
           <div className="space-y-3">
-            <Label htmlFor="output-format" className="font-medium text-neutral-800">
+            <Label
+              htmlFor="output-format"
+              className="font-medium text-neutral-800"
+            >
               Output Format
             </Label>
             <Select
               value={config.outputFormat}
-              onValueChange={(value: "png" | "jpeg") => updateConfig("outputFormat", value)}
+              onValueChange={(value: "png" | "jpeg") =>
+                updateConfig("outputFormat", value)
+              }
             >
               <SelectTrigger className="h-10 text-neutral-700 focus:ring-softblue-500">
                 <SelectValue placeholder="Select format" />
@@ -245,9 +274,9 @@ export function GenerateConfig() {
                 <SelectItem value="jpeg">JPEG</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
         </CollapsibleContent>
       </Collapsible>
     </div>
-  )
+  );
 }

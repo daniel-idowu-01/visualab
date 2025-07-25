@@ -24,6 +24,8 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           prompt,
           num_results: 1,
+          prompt_enhancement: aiPromptEnhancement,
+          enhance_image: config.imageResolution === "hd" ? true : false,
           sync: true,
         }),
       }
@@ -134,6 +136,8 @@ export async function POST(request: Request) {
     if (!fileUrl) {
       throw new Error("Failed to get secure URL from Cloudinary response");
     }
+
+    console.log("Image successfully uploaded to Cloudinary");
 
     const newImage: ImageResult = {
       id: `img_${Date.now()}`,
