@@ -19,8 +19,8 @@ export function useImageGeneration() {
     try {
       const formData = new FormData();
       formData.append("prompt", productDescription);
-      // formData.append("aiPromptEnhancement", String(aiPromptEnhancement));
-      // formData.append("config", JSON.stringify(config));
+      formData.append("aiPromptEnhancement", String(aiPromptEnhancement));
+      formData.append("config", JSON.stringify(config));
       if (referenceImageFile) {
         formData.append("referenceImage", referenceImageFile);
       }
@@ -37,7 +37,6 @@ export function useImageGeneration() {
       }
 
       const data: ImageResult = await response.json();
-      console.log("data in hook: ", data)
       setIsLoading(false);
       addImage(data);
     } catch (err: any) {

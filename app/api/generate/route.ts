@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
     const config: ConfigOptions = JSON.parse(configString);
 
-    const modelVersion = "2.3";
+    const modelVersion = "3.2";
     const briaResponse = await fetch(
       `https://engine.prod.bria-api.com/v1/text-to-image/base/${modelVersion}`,
       {
@@ -47,7 +47,6 @@ export async function POST(request: Request) {
     }
 
     const imageUrl = briaData.result[0].urls[0];
-    console.log("Bria image URL:", imageUrl);
 
     console.log("Fetching image from Bria URL...");
     const imageResponse = await fetch(imageUrl, {

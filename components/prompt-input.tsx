@@ -65,7 +65,7 @@ export function PromptInput() {
         />
       </div>
 
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         <Label
           htmlFor="reference-image"
           className="text-lg font-semibold text-neutral-800 flex items-center gap-2"
@@ -91,7 +91,7 @@ export function PromptInput() {
             {(referenceImageFile.size / 1024 / 1024).toFixed(2)} MB)
           </p>
         )}
-      </div>
+      </div> */}
 
       <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg border border-neutral-200">
         <div className="flex items-center gap-2">

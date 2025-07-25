@@ -22,8 +22,6 @@ export function ImageGallery() {
   const { generatedImages, config, isLoading } = useVisuaLabStore();
   const [selectedImage, setSelectedImage] = useState<ImageResult | null>(null);
 
-  console.log("Generated Images: ", generatedImages);
-
   const latestImage = generatedImages[generatedImages.length - 1];
 
   const handleDownload = (imageSrc: string, format: "png" | "jpeg") => {
