@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
+import uploadToCloudinary from "@/helpers/cloudinary";
 import type { ConfigOptions, ImageResult } from "@/types/app";
 
 export async function POST(request: Request) {
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
           prompt,
           num_results: 1,
           prompt_enhancement: aiPromptEnhancement,
-          enhance_image: config.imageResolution === "hd" ? true : false,
+          enhance_image: config.imageResolution === "hd",
           sync: true,
         }),
       }
@@ -63,32 +64,10 @@ export async function POST(request: Request) {
     if (!imageResponse.ok) {
       console.log("Direct fetch failed, trying Cloudinary URL upload...");
 
-      const cloudinaryFormData = new FormData();
-      cloudinaryFormData.append("file", imageUrl);
-      cloudinaryFormData.append(
-        "upload_preset",
-        process.env.CLOUDINARY_UPLOAD_PRESET!
+      const fileUrl = await uploadToCloudinary(
+        imageUrl,
+        `generated_${Date.now()}`
       );
-      cloudinaryFormData.append("folder", "visualab-generated");
-      cloudinaryFormData.append("public_id", `generated_${Date.now()}`);
-
-      const cloudinaryResponse = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
-        cloudinaryFormData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          timeout: 60000,
-          maxContentLength: Infinity,
-          maxBodyLength: Infinity,
-        }
-      );
-
-      const fileUrl = cloudinaryResponse?.data?.secure_url;
-      if (!fileUrl) {
-        throw new Error("Failed to get secure URL from Cloudinary response");
-      }
 
       const newImage: ImageResult = {
         id: `img_${Date.now()}`,
@@ -107,35 +86,10 @@ export async function POST(request: Request) {
       type: "image/png",
     });
 
-    const cloudinaryFormData = new FormData();
-    cloudinaryFormData.append("file", imageFile);
-    cloudinaryFormData.append(
-      "upload_preset",
-      process.env.CLOUDINARY_UPLOAD_PRESET!
+    const fileUrl = await uploadToCloudinary(
+      imageFile,
+      `generated_${Date.now()}`
     );
-
-    cloudinaryFormData.append("folder", "visualab-generated");
-    cloudinaryFormData.append("public_id", `generated_${Date.now()}`);
-
-    console.log("Uploading to Cloudinary...");
-    const cloudinaryResponse = await axios.post(
-      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
-      cloudinaryFormData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        timeout: 60000,
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
-      }
-    );
-
-    const fileUrl = cloudinaryResponse?.data?.secure_url;
-
-    if (!fileUrl) {
-      throw new Error("Failed to get secure URL from Cloudinary response");
-    }
 
     console.log("Image successfully uploaded to Cloudinary");
 
