@@ -23,16 +23,39 @@ import {
   DownloadIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useVisuaLabStore } from "@/lib/store";
+import { useLifestyleShot } from "@/hooks/use-lifestyle-shot";
+import { ImageGallery } from "../image-gallery";
 
 export function LifestyleShotTab() {
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<boolean | null>(null);
   const [editedImageSrc, setEditedImageSrc] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    isLoading,
+    setIsLoading,
+    lifestyleShotType,
+    setLifestyleShotType,
+    sceneDescription,
+    setSceneDescription,
+    productImageFile,
+    referenceImageFile,
+    setReferenceImageFile,
+    setProductImageFile,
+    error,
+  } = useVisuaLabStore();
+  const { generateLifestyleShot } = useLifestyleShot();
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: string
+  ) => {
     if (event.target.files && event.target.files[0]) {
-      setUploadedFile(event.target.files[0]);
-      setEditedImageSrc(null); // Reset edited image on new upload
+      if (type === "reference") {
+        setReferenceImageFile(event.target.files[0]);
+        setEditedImageSrc(null);
+      } else {
+        setProductImageFile(event.target.files[0]);
+      }
     } else {
       setUploadedFile(null);
     }
@@ -40,11 +63,10 @@ export function LifestyleShotTab() {
 
   const handleGenerate = async () => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     setEditedImageSrc(
       "/placeholder.svg?height=600&width=800&text=Lifestyle%20Shot%20Result"
     );
+    generateLifestyleShot();
     setIsLoading(false);
   };
 
@@ -82,7 +104,10 @@ export function LifestyleShotTab() {
                 id="product-image-upload"
                 type="file"
                 accept="image/*"
-                onChange={handleFileUpload}
+                onChange={(e) => {
+                  handleFileUpload(e, "product");
+                  setUploadedFile(true)
+                }}
                 className="block w-full text-sm text-neutral-500
                   file:mr-4 file:px-4
                   file:rounded-full file:border-0
@@ -90,9 +115,9 @@ export function LifestyleShotTab() {
                   file:bg-softblue-50 file:text-softblue-700
                   hover:file:bg-softblue-100 cursor-pointer"
               />
-              {uploadedFile && (
+              {productImageFile && (
                 <p className="text-sm text-neutral-500 mt-2">
-                  Selected: {uploadedFile.name}
+                  Selected: {productImageFile.name}
                 </p>
               )}
             </div>
@@ -106,34 +131,68 @@ export function LifestyleShotTab() {
                   >
                     Shot Type
                   </Label>
-                  <Select defaultValue="text-prompt">
+                  <Select
+                    defaultValue="text"
+                    onValueChange={(value: "text" | "image") =>
+                      setLifestyleShotType(value)
+                    }
+                  >
                     <SelectTrigger className="h-10 text-neutral-700 focus:ring-softblue-500">
                       <SelectValue placeholder="Select shot type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="text-prompt">Text Prompt</SelectItem>
-                      <SelectItem value="reference-image">
-                        Reference Image
-                      </SelectItem>
+                      <SelectItem value="text">Text Prompt</SelectItem>
+                      <SelectItem value="image">Reference Image</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="environment-description"
-                    className="text-lg font-semibold text-neutral-800"
-                  >
-                    Describe the Environment
-                  </Label>
-                  <Textarea
-                    id="environment-description"
-                    placeholder="e.g., A bustling city street at night, a serene beach at sunset"
-                    className="min-h-[100px] text-base p-3 border-neutral-300 focus-visible:ring-softblue-500"
-                  />
-                </div>
+                {lifestyleShotType === "text" ? (
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="environment-description"
+                      className="text-lg font-semibold text-neutral-800"
+                    >
+                      Describe the Environment
+                    </Label>
+                    <Textarea
+                      value={sceneDescription}
+                      onChange={(e) => setSceneDescription(e.target.value)}
+                      id="environment-description"
+                      placeholder="e.g., A bustling city street at night, a serene beach at sunset"
+                      className="min-h-[100px] text-base p-3 border-neutral-300 focus-visible:ring-softblue-500"
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="product-image-upload"
+                      className="text-lg font-semibold text-neutral-800 flex items-center gap-2"
+                    >
+                      <UploadCloudIcon className="h-5 w-5 text-softblue-500" />
+                      Upload Reference Image
+                    </Label>
+                    <Input
+                      id="product-image-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, "reference")}
+                      className="block w-full text-sm text-neutral-500
+                  file:mr-4 file:px-4
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-softblue-50 file:text-softblue-700
+                  hover:file:bg-softblue-100 cursor-pointer"
+                    />
+                    {productImageFile && (
+                      <p className="text-sm text-neutral-500 mt-2">
+                        Selected: {productImageFile.name}
+                      </p>
+                    )}
+                  </div>
+                )}
 
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <Label
                     htmlFor="force-rmbg"
                     className="font-medium text-neutral-800"
@@ -144,11 +203,11 @@ export function LifestyleShotTab() {
                     id="force-rmbg"
                     className="data-[state=checked]:bg-softblue-500"
                   />
-                </div>
+                </div> */}
 
                 <Button
                   onClick={handleGenerate}
-                  disabled={isLoading || !uploadedFile}
+                  disabled={isLoading || !productImageFile}
                   className="w-full py-3 text-lg font-semibold bg-softblue-500 hover:bg-softblue-600 text-white rounded-lg shadow-md transition-all duration-200 hover:scale-[1.01]"
                 >
                   {isLoading ? (
@@ -167,54 +226,7 @@ export function LifestyleShotTab() {
       </div>
 
       {/* Right Column: Image Display */}
-      <div className="space-y-6">
-        <Card className="bg-white shadow-lg border border-neutral-200">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl font-semibold text-neutral-900">
-              Result
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="min-h-[300px] flex items-center justify-center relative">
-            {isLoading && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-900 bg-opacity-60 z-10 rounded-lg">
-                <Loader2Icon className="h-12 w-12 text-softblue-500 animate-spin" />
-                <p className="mt-4 text-white text-lg font-medium">
-                  Processing...
-                </p>
-              </div>
-            )}
-            {editedImageSrc ? (
-              <div className="relative w-full h-full flex flex-col items-center justify-center">
-                <Image
-                  src={editedImageSrc || "/placeholder.svg"}
-                  alt="Edited Lifestyle Shot"
-                  width={800}
-                  height={600}
-                  className="max-w-full max-h-[500px] object-contain rounded-lg shadow-md"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-                <Button
-                  onClick={handleDownload}
-                  className="mt-4 bg-softblue-500 hover:bg-softblue-600 text-white"
-                >
-                  <DownloadIcon className="mr-2 h-5 w-5" />
-                  Download Result
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center text-neutral-500 p-8">
-                <ImagePlusIcon className="h-16 w-16 mx-auto mb-4 text-neutral-300" />
-                <p className="text-lg">
-                  Upload an image and generate a lifestyle shot.
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+      <ImageGallery />
     </div>
   );
 }
