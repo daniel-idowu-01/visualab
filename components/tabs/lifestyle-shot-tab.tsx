@@ -62,12 +62,13 @@ export function LifestyleShotTab() {
   };
 
   const handleGenerate = async () => {
-    setIsLoading(true);
-    setEditedImageSrc(
-      "/placeholder.svg?height=600&width=800&text=Lifestyle%20Shot%20Result"
-    );
+    if (!sceneDescription.trim() && lifestyleShotType === "text") {
+      useVisuaLabStore.setState({
+        error: "Please enter a scene description.",
+      });
+      return;
+    }
     generateLifestyleShot();
-    setIsLoading(false);
   };
 
   const handleDownload = () => {
@@ -106,7 +107,7 @@ export function LifestyleShotTab() {
                 accept="image/*"
                 onChange={(e) => {
                   handleFileUpload(e, "product");
-                  setUploadedFile(true)
+                  setUploadedFile(true);
                 }}
                 className="block w-full text-sm text-neutral-500
                   file:mr-4 file:px-4
@@ -219,6 +220,14 @@ export function LifestyleShotTab() {
                     "Generate Lifestyle Shot"
                   )}
                 </Button>
+                {error && (
+                  <div
+                    className="text-red-500 text-center text-sm font-medium mt-2"
+                    role="alert"
+                  >
+                    {error}
+                  </div>
+                )}
               </>
             )}
           </CardContent>
