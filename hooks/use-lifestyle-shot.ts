@@ -23,7 +23,7 @@ export function useLifestyleShot() {
       formData.append("lifestyle_shot_type", lifestyleShotType);
 
       if (lifestyleShotType === "image" && referenceImageFile) {
-        formData.append("ref_image_urls", referenceImageFile);
+        formData.append("ref_image_url", referenceImageFile);
       }
 
       const response = await fetch("/api/lifestyleshot", {

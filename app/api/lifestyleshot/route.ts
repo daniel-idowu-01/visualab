@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const lifeStyleShotType = formData.get("lifestyle_shot_type");
     const configString = formData.get("config") as string;
     const productImage = formData.get("image_url") as File | null;
-    const referenceImage = formData.get("ref_image_urls") as File | null;
+    const referenceImage = formData.get("ref_image_url") as File | null;
 
     const config: ConfigOptions = JSON.parse(configString);
 
@@ -35,10 +35,12 @@ export async function POST(request: Request) {
     };
 
     if (lifeStyleShotType === "image") {
-      body.ref_image_url = referenceImageUrl;
+      body.ref_image_urls = referenceImageUrl;
     } else if (lifeStyleShotType === "text") {
       body.scene_description = sceneDescription;
     }
+
+    console.log("Body data: ", body);
 
     const briaResponse = await fetch(
       `https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_${lifeStyleShotType}`,
@@ -51,13 +53,13 @@ export async function POST(request: Request) {
         body: JSON.stringify(body),
       }
     );
-    
+
     if (!briaResponse.ok) {
-        throw new Error(
-            `Bria API error: ${briaResponse.status} ${briaResponse.statusText}`
-        );
+      throw new Error(
+        `Bria API error: ${briaResponse.status} ${briaResponse.statusText}`
+      );
     }
-    
+
     const briaData = await briaResponse.json();
 
     // if (

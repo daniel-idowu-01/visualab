@@ -50,7 +50,7 @@ export function LifestyleShotTab() {
     type: string
   ) => {
     if (event.target.files && event.target.files[0]) {
-      if (type === "reference") {
+      if (type === "image") {
         setReferenceImageFile(event.target.files[0]);
         setEditedImageSrc(null);
       } else {
@@ -177,7 +177,7 @@ export function LifestyleShotTab() {
                       id="product-image-upload"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => handleFileUpload(e, "reference")}
+                      onChange={(e) => handleFileUpload(e, "image")}
                       className="block w-full text-sm text-neutral-500
                   file:mr-4 file:px-4
                   file:rounded-full file:border-0
@@ -185,9 +185,9 @@ export function LifestyleShotTab() {
                   file:bg-softblue-50 file:text-softblue-700
                   hover:file:bg-softblue-100 cursor-pointer"
                     />
-                    {productImageFile && (
+                    {referenceImageFile && (
                       <p className="text-sm text-neutral-500 mt-2">
-                        Selected: {productImageFile.name}
+                        Selected: {referenceImageFile.name}
                       </p>
                     )}
                   </div>
@@ -234,7 +234,6 @@ export function LifestyleShotTab() {
         </Card>
       </div>
 
-      {/* Right Column: Image Display */}
       <ImageGallery />
     </div>
   );
