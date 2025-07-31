@@ -12,7 +12,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-128px)] p-4 md:p-8 bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="max-w-4xl w-full space-y-10 text-center">
-        <div className="space-y-6">
+        <div className="space-y-12">
           <h1 className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl lg:text-7xl leading-tight">
             Unleash Your Product's Visual Potential
           </h1>
@@ -33,7 +33,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {/* <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border border-neutral-200">
             <CardHeader className="flex flex-row items-center gap-4 pb-2">
               <FolderOpenIcon className="h-8 w-8 text-softblue-500" />
@@ -116,7 +116,7 @@ export default function DashboardPage() {
               </Button>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   );

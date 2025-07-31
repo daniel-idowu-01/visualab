@@ -32,11 +32,13 @@ export interface VisuaLabState {
   isLoading: boolean;
   error: string | null;
   user: boolean;
+  maskData: string;
   setProductDescription: (desc: string) => void;
   setLifestyleShotType: (type: string) => void;
   setSceneDescription: (desc: string) => void;
   setProductImageFile: (file: File | null) => void;
   setReferenceImageFile: (file: File | null) => void;
+  setMaskData: (desc: string) => void
   toggleAiPromptEnhancement: () => void;
   updateConfig: (key: keyof ConfigOptions, value: any) => void;
   addImage: (image: ImageResult) => void;
