@@ -17,10 +17,16 @@ export async function POST(request: Request) {
       `generated_${Date.now()}`
     );
 
+    const productMaskUrl = await uploadToCloudinary(
+      productImage!,
+      `generated_${Date.now()}`
+    );
+
     const body: any = {
       image_url: productImageUrl,
-      mask_url: maskUrl,
+      mask_url: productMaskUrl,
       prompt,
+      sync: true,
     };
 
     console.log("Body data: ", body);
@@ -108,7 +114,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newImage);
   } catch (error) {
-    console.error("Error in /api/lifestyleshot: ", error);
+    console.error("Error in /api/generate/fill: ", error);
 
     if (error instanceof Error) {
       console.error("Error message:", error.message);

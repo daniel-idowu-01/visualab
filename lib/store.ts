@@ -29,7 +29,6 @@ export const useVisuaLabStore = create<VisuaLabState>((set) => ({
   generatedImages: [],
   isLoading: false,
   error: null,
-  maskData: "",
   user,
 
   setProductDescription: (desc) => set({ productDescription: desc }),
@@ -37,7 +36,6 @@ export const useVisuaLabStore = create<VisuaLabState>((set) => ({
   setSceneDescription: (desc) => set({ sceneDescription: desc }),
   setProductImageFile: (file) => set({ productImageFile: file }),
   setReferenceImageFile: (file) => set({ referenceImageFile: file }),
-  setMaskData: (desc) => set({ maskData: desc }),
   toggleAiPromptEnhancement: () =>
     set((state) => ({ aiPromptEnhancement: !state.aiPromptEnhancement })),
   updateConfig: (key, value) =>

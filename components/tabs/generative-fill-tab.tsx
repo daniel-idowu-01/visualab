@@ -35,7 +35,6 @@ export function GenerativeFillTab() {
   const {
     isLoading,
     setIsLoading,
-    setMaskData,
     productDescription,
     setProductDescription,
     productImageFile,
@@ -70,9 +69,8 @@ export function GenerativeFillTab() {
       // Get the mask data from the canvas
       const maskData = await canvasRef.current.exportImage("png");
       // console.log("Mask data:", maskData);
-      setMaskData(maskData);
 
-      generateImageFill();
+      generateImageFill(maskData);
     } catch (error) {
       console.error("Error generating fill:", error);
     } finally {

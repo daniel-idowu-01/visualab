@@ -6,12 +6,11 @@ export function useImageFillGeneration() {
     productDescription,
     productImageFile,
     setIsLoading,
-    maskData,
     setError,
     addImage,
   } = useVisuaLabStore();
 
-  const generateImageFill = async () => {
+  const generateImageFill = async (maskData: string) => {
     setIsLoading(true);
     setError(null);
 
